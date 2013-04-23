@@ -1,0 +1,206 @@
+%
+% Copyright (c) 2013 The NetBSD Foundation, Inc.
+% All rights reserved.
+%
+% This code is derived from software contributed to The NetBSD Foundation
+% by Radoslaw Kujawa.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions
+% are met:
+% 1. Redistributions of source code must retain the above copyright
+%    notice, this list of conditions and the following disclaimer.
+% 2. Redistributions in binary form must reproduce the above copyright
+%    notice, this list of conditions and the following disclaimer in the
+%    documentation and/or other materials provided with the distribution.
+%
+% THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
+% ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+% TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+% PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE FOUNDATION OR CONTRIBUTORS
+% BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+% CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+% SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+% INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+% CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+% ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+% POSSIBILITY OF SUCH DAMAGE.
+%
+% 
+\documentclass[dvipsnames,table]{beamer}
+\usepackage{polski}
+
+\usetheme{Rochester}
+\usecolortheme{orchid}
+
+\usepackage{listings}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{wasysym}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}[numbered]
+\setbeamerfont{caption}{size=\scriptsize}
+\setbeamercolor{framenote}{bg=NetBSD-orange!25}
+\setbeamercolor{rednote}{bg=Red!25}
+\setbeamercolor{palette primary}{use=structure,fg=white,bg=NetBSD-orange}
+\setbeamercolor{palette secondary}{use=structure,fg=white,bg=NetBSD-orange2}
+
+\setbeamertemplate{itemize item}{\scriptsize\raise1pt\hbox{\donotcoloroutermaths$\blacktriangleright$}}
+\setbeamertemplate{itemize subitem}{\tiny\raise1pt\hbox{\donotcoloroutermaths$\bullet$}}
+\setbeamertemplate{itemize subsubitem}{\tiny\raise1pt\hbox{\donotcoloroutermaths{--}}}
+
+\setbeamertemplate{enumerate item}{\insertenumlabel.}
+\setbeamertemplate{enumerate subitem}{\insertenumlabel.\insertsubenumlabel}
+\setbeamertemplate{enumerate subsubitem}{\insertenumlabel.\insertsubenumlabel.\insertsubsubenumlabel}
+\setbeamertemplate{enumerate mini template}{\insertenumlabel}
+
+\setbeamercolor{itemize item}{fg=NetBSD-orange, bg=NetBSD-orange}
+\setbeamercolor{itemize subitem}{fg=NetBSD-orange, bg=NetBSD-orange}
+\setbeamercolor{itemize subsubitem}{fg=NetBSD-orange, bg=NetBSD-orange}
+
+\setbeamercolor{section number projected}{fg=white,bg=NetBSD-orange}
+\setbeamercolor{subsection number projected}{fg=white,bg=NetBSD-orange}
+\setbeamercolor{button}{bg=NetBSD-orange,fg=white}
+
+\setbeamertemplate{section in toc}[circle]
+\setbeamertemplate{subsection in toc}[square]
+
+
+\definecolor{NetBSD-orange}{RGB}{242,103,17}
+\definecolor{NetBSD-orange2}{RGB}{177,76,12}
+\hypersetup{colorlinks=true,linkcolor=white,urlcolor=NetBSD-orange}
+
+\setlength{\tabcolsep}{8pt}
+\renewcommand{\arraystretch}{1.2}
+
+\newcommand{\nbsdcolor}[1] {
+	{\color{NetBSD-orange} #1}
+}
+
+\lstset{
+   language=C,
+   basicstyle=\tiny,
+   breaklines=true,
+   escapechar=\@,
+   commentstyle=\color{NetBSD-orange}
+}
+
+%\AtBeginSection[]{
+%\frame{\sectionpage}
+%}
+
+\title{System operacyjny NetBSD\\ w zastosowaniach wbudowanych}
+
+
+\author{Radoslaw Kujawa -- rkujawa@NetBSD.org}
+
+\institute{The NetBSD Foundation}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%\begin{frame}[allowframebreaks]
+%\frametitle{Table of Contents}
+%{
+%\hypersetup{colorlinks=true,linkcolor=black,urlcolor=NetBSD-orange}
+%\tableofcontents
+%}
+%\end{frame}
+
+\section{Main}
+
+\begin{frame}
+\frametitle{Czym jest NetBSD?}
+\begin{itemize}
+	\item UNIX-owy system operacyjny
+	\item ...
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Historia NetBSD w pigułce}
+\begin{itemize}
+	\item Projekt NetBSD istnieje od 20 lat, wywodzi się z 4.4BSD
+	\item Korzenie systemu sięgają kodu oryginalnego UNIXa - prawie pół wieku historii
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kto obecnie używa NetBSD?}
+\begin{itemize}
+	\item Powszechnie znane firmy oraz organizacje
+	\begin{itemize}
+		\item Apple - AirPort Extreme, Time Capsule, różne komponenty OS X oraz iOS
+		\item Blackberry/RIM - Stos IP, sterowniki, pkgsrc w systemie QNX
+		\item Dell - \href{http://www.dell.com/us/business/p/force10-ftos/pd}{Force10 OS}
+ 		\item Microsoft - Architektura \href{http://research.microsoft.com/en-us/projects/emips/}{eMIPS}
+		\item NASA - International Space Station
+		\item oraz inni
+	\end{itemize}
+	\item Hobbyści
+	\item Hakerzy
+	\item Naukowcy
+	\item Uniwersytety
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Jak zacząć rozwój aplikacji wbudowanych z NetBSD?}
+\begin{itemize}
+	\item Łatwo dostępne zestawy uruchomieniowe
+	\begin{itemize}
+		\item Raspberry Pi
+		\item Beagleboard, Beaglebone
+		\item wiele innych
+
+	\end{itemize}
+	\item Możliwość wykorzystania niektórych produktów ,,z półki''
+	\begin{itemize}
+		\item foo
+
+	\end{itemize}
+
+	
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Cechy NetBSD}
+\begin{itemize}
+	\item Małe wymagania sprzętowe
+	\item ,,czysty'' projekt oraz implementacja 
+
+	\item Powyższe cechy czynią NetBSD dobra platforma dla rozwiązań wbudowanych
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Pytania}
+
+\begin{itemize}
+	\item Czy są jakieś pytania?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Koniec\ldots}
+\vspace*{-0.8cm}
+\begin{center}
+\includegraphics[scale=0.5]{NetBSD.png}
+
+Dziękuje!
+\end{center}
+\end{frame}
+
+ 
+\end{document}
