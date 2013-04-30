@@ -98,7 +98,7 @@
 
 \author{Radoslaw Kujawa -- rkujawa@NetBSD.org}
 
-\institute{The NetBSD Foundation}
+\institute{The NetBSD Foundation / OSEC}
 
 \begin{document}
 
@@ -127,14 +127,46 @@
 \begin{frame}
 \frametitle{Historia NetBSD w pigułce}
 \begin{itemize}
-	\item Projekt NetBSD istnieje od 20 lat, wywodzi się z Berkeley Software Distribution -- systemu operacyjnego rozwijanego w grupie CSRG na Uniwersytecie w Berkeley
-	\item Korzenie systemu sięgają kodu oryginalnego UNIXa - prawie pół wieku historii
+	\item Projekt NetBSD istnieje od 20 lat
+	\item Wywodzi się z Berkeley Software Distribution -- systemu operacyjnego rozwijanego w grupie CSRG na Uniwersytecie w Berkeley, Kalifornia
+	\item Korzenie systemu sięgają kodu oryginalnego UNIXa -- prawie pół wieku historii
 
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Kto obecnie używa NetBSD?}
+\frametitle{Cechy NetBSD}
+\begin{itemize}
+	\item Małe wymagania sprzętowe (ok. 24MB RAM, 300MB przestrzeni masowej)
+	\item Bardzo dobra przenośność -- 57 portów, 12 architektur CPU
+	\item Przykładanie uwagi do ,,czystości'' projektu oraz implementacji
+	\item W zgodzie z duchem UNIXa
+	\item Dobra dokumentacja
+	\item Powyższe cechy czynią NetBSD doskonałym systemem operacyjnym dla:
+	\begin{itemize}
+		\item \textbf{Rozwiązań wbudowanych}
+		\item Prac badawczych nad nowymi technologiami w informatyce
+		\item Serwerów (w niektórych zastosowaniach)
+		\item Komputerów osobistych o małej mocy obliczeniowej
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Cechy systemu wbudowanego}
+\begin{itemize}
+	\item Antyteza systemu ogólnego przeznaczenia
+	\item Pełni ściśle określone przez twórców funkcje
+	\item Ograniczone możliwości dostosowania i konfiguracji
+	\item Typowe systemy wbudowane: dekodery TV, telewizory, lodówki, komputery w samochodach, urządzenia sieciowe (routery, switche), sprzęt pomiarowy, systemy alarmowe
+	\item Powoli zaciera się granica między sprzętem wykorzystywanym w systemach wbudowanych a komputerach ogólnego przeznaczenia
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Wykorzystanie i rozwój NetBSD}
+\begin{itemize}
+\item Kto używa NetBSD?
 \begin{itemize}
 	\item Powszechnie znane firmy oraz organizacje
 	\begin{itemize}
@@ -145,48 +177,24 @@
 		\item NASA - International Space Station
 		\item oraz inni
 	\end{itemize}
-	\item Hobbyści
-	\item Hakerzy
-	\item Naukowcy
-	\item Uniwersytety
+	\item Hobbyści i hakerzy
+	\item Naukowcy i uniwersytety
 \end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Kto pracuje nad NetBSD?}
+\item{Kto pracuje nad NetBSD?}
 \begin{itemize}
 	\item Niezależni developerzy zrzeszeni w fundacji NetBSD
-	\item Firmy - w ramach kontraktów
-	\begin{itemize}
-		\item Semihalf (PL)
-		\item Denx Software Engineering (DE)
-		\item 3am Software Foundry (US)
-	\end{itemize}
+	\item Firmy - w ramach projektów lub kontraktów (np. Semihalf, 3am Software Foundry, Genetec, inni)
+\end{itemize}
+
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}
-\frametitle{Cechy NetBSD}
-\begin{itemize}
-	\item Małe wymagania sprzętowe
-	\item Bardzo dobra przenośność -- 57 portów, 12 architektur CPU
-
-	\item Przykładanie uwagi do ,,czystości'' projektu oraz implementacji
-	\item W zgodzie z duchem UNIXa
-
-	\item Powyższe cechy czynią NetBSD doskonałą platformą dla rozwiązań wbudowanych
-\end{itemize}
-\end{frame}
-
-% co jest system wbudowany, cechy systemu wbudowanego
-% granica miedzy sprzetem ogolnego przeznaczenia a systemami wbudowanymi sie zaciera
 
 \begin{frame}
 \frametitle{Jądro NetBSD}
 \begin{itemize}
-	\item Klasyczny kernel monolityczny z modułami\footnote{Systemy wbudowanie zwykle nie korzystają z modułów.}
-	\item Wymaga jednostki zarządzania pamięcią (MMU)
+	\item Klasyczny kernel monolityczny z modułami\footnote{Systemy wbudowanie zwykle nie wykorzystują modułów.}
+	\item Oferuje ochronę pamięci i pamięć wirtualną -- wymaga jednostki zarządzania pamięcią (MMU)
 
 \end{itemize}
 \end{frame}
@@ -225,14 +233,14 @@
 \begin{frame}
 \frametitle{Budowanie NetBSD ze źródeł}
 \begin{itemize}
-	\item Procedura budowania jest trywialna
+	\item Procedura budowania systemu ze źródeł jest trywialna
 	\begin{itemize}
-		\item \tt{cvs co src \&\& cd src \&\& cvs up -dP}
+		\item Ściągnięcie kodu źródłowego NetBSD
 		\item \tt{./build.sh -m [port] tools}
 		\item \tt{./build.sh -m [port] distribution}
 	\end{itemize}
 	\item Skrypt build.sh jest tylko opakowauje standardowe pliki Makefile
-	\item Kompilacja wskrośna całego systemu możliwa z prawie każdego innego systemu UNIX-owego (Linux, MacOS X, *BSD, Solaris, itd.)
+	\item Kompilacja wskrośna całego systemu możliwa z prawie każdego innego systemu UNIX-owego (Linux, MacOS X, *BSD, Solaris, itd.), także o innej architekturze procesora
 \end{itemize}
 \end{frame}
 
@@ -265,7 +273,7 @@
 	\item Slot micro SD, Ethernet, host USB
 	\item Ustandaryzowane złącza pozwalają na dołączanie dodatkowych modułów (,,cape'' jak ,,shield'' w Arduino)
 	\item Interfejsy typowe dla mikrokontrolerów - SPI, I\textsuperscript{2}C, ADC, CAN, itd.
-	\item Teraz dostępna nowa wersja ,,Black'' - 1GHz, 512MB DDR3 (\$45)
+	\item Teraz dostępna nowa wersja ,,Black'' - 1GHz, 512MB DDR3, HDMI (\$45)
 \end{itemize}
 
 \column{1.5in}
