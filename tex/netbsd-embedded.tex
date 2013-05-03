@@ -90,7 +90,20 @@
 }
 
 \AtBeginSection[]{
-\frame{\sectionpage}
+\frame{
+
+\begin{center}
+
+{\usebeamerfont{section name}\usebeamercolor[fg]{section name}Część~\insertsectionnumber}
+    \vskip1em\par
+
+	\begin{beamercolorbox}[sep=12pt,center]{palette primary}
+		\usebeamerfont{section title}\insertsection\par
+	\end{beamercolorbox}
+\end{center}
+
+%\sectionpage
+}
 }
 
 \title{System operacyjny NetBSD\\ w zastosowaniach wbudowanych}
@@ -120,7 +133,9 @@
 \frametitle{Czym jest NetBSD?}
 \begin{itemize}
 	\item UNIX-owy system operacyjny
-	\item ...
+	\item Nie tylko jądro, ale \textbf{kompletny} system operacyjny
+	\item Dostarcza także interfejs graficzny (X Window System)
+	\item Oprogramowanie producentów trzecich dostępne poprzez pkgsrc (ponad 12000 paczek)
 \end{itemize}
 \end{frame}
 
@@ -129,7 +144,7 @@
 \begin{itemize}
 	\item Projekt NetBSD istnieje od 20 lat
 	\item Wywodzi się z Berkeley Software Distribution -- systemu operacyjnego rozwijanego w grupie CSRG na Uniwersytecie w Berkeley, Kalifornia
-	\item Korzenie systemu sięgają kodu oryginalnego UNIXa -- prawie pół wieku historii
+	\item Korzenie systemu sięgają kodu oryginalnego UNIXa (1969) -- prawie pół wieku historii
 
 \end{itemize}
 \end{frame}
@@ -138,10 +153,11 @@
 \frametitle{Cechy NetBSD}
 \begin{itemize}
 	\item Małe wymagania sprzętowe (ok. 24MB RAM, 300MB przestrzeni masowej)
-	\item Bardzo dobra przenośność -- 57 portów, 12 architektur CPU
+	\item Bardzo dobra przenośność -- 57 platform, 12 architektur CPU
 	\item Przykładanie uwagi do ,,czystości'' projektu oraz implementacji
 	\item W zgodzie z duchem UNIXa
-	\item Dobra dokumentacja
+	\item Kompletna dokumentacja interfejsów programistycznych
+	\item Ostrożne podejście do nowinek
 	\item Powyższe cechy czynią NetBSD doskonałym systemem operacyjnym dla:
 	\begin{itemize}
 		\item \textbf{Rozwiązań wbudowanych}
@@ -149,6 +165,7 @@
 		\item Serwerów (w niektórych zastosowaniach)
 		\item Komputerów osobistych o małej mocy obliczeniowej
 	\end{itemize}
+	\item Licencja BSD przyjazna komercyjnemu wykorzystaniu
 \end{itemize}
 \end{frame}
 
@@ -158,6 +175,7 @@
 	\item Antyteza systemu ogólnego przeznaczenia
 	\item Pełni ściśle określone przez twórców funkcje
 	\item Ograniczone możliwości dostosowania i konfiguracji
+	\item Sprzęt oraz oprogramowanie zwykle mocno zintegrowane
 	\item Typowe systemy wbudowane: dekodery TV, telewizory, lodówki, komputery w samochodach, urządzenia sieciowe (routery, switche), sprzęt pomiarowy, systemy alarmowe
 	\item Powoli zaciera się granica między sprzętem wykorzystywanym w systemach wbudowanych a komputerach ogólnego przeznaczenia
 \end{itemize}
@@ -174,6 +192,7 @@
 		\item Blackberry/RIM - Stos IP, sterowniki, pkgsrc w systemie QNX
 		\item Dell - \href{http://www.dell.com/us/business/p/force10-ftos/pd}{Force10 OS}
  		\item Microsoft - Architektura \href{http://research.microsoft.com/en-us/projects/emips/}{eMIPS}
+		\item micro systems - Kasy fiskalne, POSy \href{http://www.arcapos.ch/produkt/}{arcapos}
 		\item NASA - International Space Station
 		\item oraz inni
 	\end{itemize}
@@ -193,8 +212,16 @@
 \begin{frame}
 \frametitle{Jądro NetBSD}
 \begin{itemize}
-	\item Klasyczny kernel monolityczny z modułami\footnote{Systemy wbudowanie zwykle nie wykorzystują modułów.}
+	\item Klasyczne jądro monolityczne z modułami\footnote{Systemy wbudowanie zwykle nie wykorzystują modułów.}
 	\item Oferuje ochronę pamięci i pamięć wirtualną -- wymaga jednostki zarządzania pamięcią (MMU)
+	\item Napisane w C, z małymi wstawkami w asemblerze
+	\item Większość kodu niezależna od platformy sprzętowej
+	\item Mechanizmy ułatwiające pisanie kodu zależnego od platformy (sterowników urządzeń)
+	\begin{itemize}
+		\item bus\_space(4), bus\_dma(4)
+		\item autoconf(4)
+	\end{itemize}
+	\item Wbudowany w jądro debugger
 
 \end{itemize}
 \end{frame}
@@ -204,7 +231,11 @@
 \begin{frame}
 \frametitle{Od czego zacząć?}
 \begin{itemize}
-	\item Pomysł
+	\item Pomysł -- patrz poprzedni wykład {\Large \smiley}
+	\item Wybór zestawu ewaluacyjnego
+	\item Wybór dodatkowych modułów
+	\item Implementacja oprogramowania
+	\item Jeśli produkcja masowa: projekt i budowa własnego sprzętu
 \end{itemize}
 \end{frame}	
 
@@ -251,11 +282,44 @@
 	\item Czy architektura procesora (powerpc, arm, mips, ...) jest już obsługiwana? 
 	\item Czy platforma, którą chcę wykorzystać jest już obsługiwana?
 	\item Czy wszystkie peryferia są obsługiwane?
-	\item ,,port''
-	\item Dzięki modularnej architekturze NetBSD przeniesienie systemu na nową platformę, czy dodanie wsparcia dla nowego typu procesora jest wzlgędnie proste
-	\item Ale dalej nie jest to zadanie dla nowicjusza
+	\item Słowo ,,port'' w terminologii NetBSD
+	\item Dzięki modularnej architekturze NetBSD przeniesienie (,,portowanie'') systemu na nową platformę, czy dodanie wsparcia dla nowego typu procesora jest wzlgędnie proste
 \end{itemize}
 \end{frame}
+
+\begin{frame}
+\frametitle{Dostęp do sprzętu w aplikacji wbudowanej}
+\begin{itemize}
+	\item W systemach opartych na 8-bitowych oraz 16-bitowych mikrokontrolerach zwyczajem jest bezpośredni dostęp do sprzętu
+	\item NetBSD jako tradycyjny system UNIX-owy implementuje ochronę pamięci i pamięć wirtualną
+	\begin{itemize}
+		\item Ściśle zdefiniowany interfejs między jądrem a przestrzenią użytkownika
+		\item Większa niezawodność i bezpieczeństwo
+	\end{itemize}
+\end{itemize}
+\begin{center}
+\includegraphics[scale=0.33]{img_hwaccess.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{App}
+\begin{itemize}
+	\item Aplikacja wbudowana jest ,,normalnym'' programem działającym w przestrzeni użytkownika
+	\item Standardy API: ANSI C, POSIX, inne typowe dla UNIXa
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Konfiguracja jądra w systemie wbudowanym}
+\begin{itemize}
+	\item Plik konfiguracyjny jądra opisuje jakie funkcjonalności oraz jakie sterowniki mają być skompilowane w danym jądrze
+	\item W systemach wbudowanych opartych o NetBSD plik konfiguracyjny jądra określa też pod jakimi adresami znajdują się peryferia
+	\item ...
+	\item W Linux i FreeBSD przyjęto inne rozwiązanie do tego samego celu - Flattened Device Tree
+\end{itemize}
+\end{frame}
+
 
 \section{Prosta aplikacja wbudowana}
 
@@ -268,8 +332,8 @@
 \begin{itemize}
 
 	\item SoC Texas Instruments AM335x 720MHz
-	\item ARM Cortex-A8 (ARM v7)
-	\item 256MB DDR2
+	\item 32-bitowa architektura ARM v7
+	\item 256MB DDR2 SDRAM
 	\item Slot micro SD, Ethernet, host USB
 	\item Ustandaryzowane złącza pozwalają na dołączanie dodatkowych modułów (,,cape'' jak ,,shield'' w Arduino)
 	\item Interfejsy typowe dla mikrokontrolerów - SPI, I\textsuperscript{2}C, ADC, CAN, itd.
@@ -280,6 +344,97 @@
 	\includegraphics[scale=0.5]{img_beaglebone.jpg}
 \end{columns}
 \end{frame}
+
+\begin{frame}
+\frametitle{Aplikacja wbudowana -- założenia funkcjonalne}
+\begin{itemize}
+	\item System wbudowany -- monitoring regulacji napięcia
+	\item Odczyt obecnego stanu regulatorów dostępnych na BeagleBone
+	\item Webowy interfejs użytkownika pozwalający na przedstawienie obecnego stanu regulatorów
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Aplikacja wbudowna -- peryferia}
+\begin{itemize}
+	\item Texas Instruments TPS65217B
+	\item Interfejs - szyna I\textsuperscript{2}C, adres 0x24
+	\item Napięcie wejściowe 5V (USB, zasilacz lub bateria)
+	\item 7 niezależnych regulatorów napięcia
+\end{itemize}
+\includegraphics[width=300pt]{img_am335x-tps65217.pdf}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Architektura aplikacji wbudowanej}
+tu rys. komponentów
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Sterownik układu TPS65217B}
+\begin{itemize}
+	\item Źródła
+	\begin{itemize}
+		\item \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/tps65217pmic.c}{src/sys/dev/i2c/tps65217pmic.c}
+		\item \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/tps65217pmicreg.h}{src/sys/dev/i2c/tps65217pmicreg.h}
+		\item Rejestracja istnienia sterownika w \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/files.i2c}{files.i2c}
+	\end{itemize}
+	\item Wykorzystuje niezależny od platformy sterownik szyny I\textsuperscript{2}C - \href{http://netbsd.gw.com/cgi-bin/man-cgi?iic+9+NetBSD-current}{iic(4)}
+	\item Wykorzystuje interfejs \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon_envsys+9+NetBSD-current}{sysmon\_envsys(4)} do przekazywania danych do przestrzeni użytkownika
+	\item Konfiguracja jądra
+	\begin{itemize}
+		\item \href{http://nxr.netbsd.org/xref/src/sys/arch/evbarm/conf/BEAGLEBONE}{src/sys/arch/evbarm/conf/BEAGLEBONE}
+		\item tps65217pmic*	at iic0 addr 0x24
+	\end{itemize}
+	\item Test z powłoki
+	\begin{itemize}
+		\item Polecenie envstat
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Serwer HTTP jako interfejs użytkownika}
+\begin{itemize}
+	\item NetBSD posiada wbudowany serwer HTTP
+	\item Obsługa CGI (oraz języków skryptowych takich ja PHP, Python z użyciem dodatkowego oprogramowania)
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Co można zrobić dalej w tej aplikacji?}
+\begin{itemize}
+	\item Wyświetlanie napięć na zewnętrznym LCD (tekstowym lub graficznym)
+	\item Przełączanie widoku na LCD za pomocą przycisków
+	\item Przechowywanie i wyświetlanie danych historycznych
+	\item Monitoring rzeczywistego napięcia na wyjściach
+	\begin{itemize}
+		\item Wykorzystanie wyjścia MUX\_OUT
+		\item Konwersja A/C w AM335x (linia A7)
+	\end{itemize}
+	\item Możliwość rekonfiguracji regulatorów w trakcie pracy
+	\item Obsługa zasilania bateryjnego (ładowanie, monitoring stanu baterii)
+	\item Obsługa przerwań (linia NNMI)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Propozycje innych prostych systemów wbudowanych}
+\begin{itemize}
+	\item Do zrealizowania z użyciem BealgeBone oraz dodatkowych modułów
+	\begin{itemize}
+		\item Stacja pogody (np. czujniki MPL115A2, MCP9801, wyświetlacz LCD)
+		\item Odtwarzacz audio (np. przetwornik TS4657, wyświetlacz LCD, przyciski)
+		\item foo
+		\item bar
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
 
 \section{Podsumowanie}
 
@@ -293,14 +448,29 @@
 
 \begin{frame}
 \frametitle{Jeśli system NetBSD was zainteresował...}
+\begin{columns}[c]
+\column{3in}
+
 \begin{itemize}
-	\item Oficjalna strona NetBSD -- \href{http://www.NetBSD.org/}{www.NetBSD.org}
+	\item \href{http://www.NetBSD.org/}{Oficjalna strona NetBSD }
+	\item \href{http://www.netbsd.org/docs/guide/en/}{The NetBSD Guide}
+	\item \href{http://www.embeddedarm.com/software/arm-netbsd-toaster.php}{NetBSD based toaster}
+	\item \href{http://misc.allbsd.de/Vortrag/EuroBSDCon_2007/Stephen_Borrill/eurobsdcon.pdf}{Building products with NetBSD - thin clients}
+	\item Kontakt do mnie
+	\begin{itemize}
+		\item rkujawa@NetBSD.org
+		\item \href{http://wiki.NetBSD.org/users/rkujawa}{wiki.NetBSD.org/users/rkujawa}
+	\end{itemize}
 \end{itemize}
+
+\column{1.5in}
+	\includegraphics[scale=0.4]{img_netbsdtoaster.jpg}
+\end{columns}
+
 \end{frame}
 
 \begin{frame}
 \frametitle{Pytania}
-
 \begin{itemize}
 	\item Czy są jakieś pytania?
 \end{itemize}
