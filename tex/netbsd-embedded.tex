@@ -158,6 +158,7 @@
 	\item W zgodzie z duchem UNIXa
 	\item Kompletna dokumentacja interfejsów programistycznych
 	\item Ostrożne podejście do nowinek
+	\item Niski ,,próg wejścia'' dla nowych programistów
 	\item Powyższe cechy czynią NetBSD doskonałym systemem operacyjnym dla:
 	\begin{itemize}
 		\item \textbf{Rozwiązań wbudowanych}
@@ -216,49 +217,21 @@
 	\item Oferuje ochronę pamięci i pamięć wirtualną -- wymaga jednostki zarządzania pamięcią (MMU)
 	\item Napisane w C, z małymi wstawkami w asemblerze
 	\item Większość kodu niezależna od platformy sprzętowej
-	\item Mechanizmy ułatwiające pisanie kodu zależnego od platformy (sterowników urządzeń)
+	\item Mechanizmy ułatwiające pisanie kodu zależnego od platformy oraz sterowników urządzeń
 	\begin{itemize}
-		\item bus\_space(4), bus\_dma(4)
-		\item autoconf(4)
+		\item \href{http://netbsd.gw.com/cgi-bin/man-cgi?bus_space++NetBSD-current}{bus\_space(4)}, \href{http://netbsd.gw.com/cgi-bin/man-cgi?bus_dma++NetBSD-current}{bus\_dma(4)}
+		\item Autokonfiguracja
 	\end{itemize}
 	\item Wbudowany w jądro debugger
-
 \end{itemize}
 \end{frame}
 
-\section{Budowa aplikacji wbudowanych na NetBSD}
 
 \begin{frame}
-\frametitle{Od czego zacząć?}
-\begin{itemize}
-	\item Pomysł -- patrz poprzedni wykład {\Large \smiley}
-	\item Wybór zestawu ewaluacyjnego
-	\item Wybór dodatkowych modułów
-	\item Implementacja oprogramowania
-	\item Jeśli produkcja masowa: projekt i budowa własnego sprzętu
-\end{itemize}
-\end{frame}	
-
-
-\begin{frame}
-\frametitle{Sprzęt do rozwoju aplikacji wbudowanych}
-\begin{itemize}
-	\item Łatwo dostępne zestawy uruchomieniowe i ewaluacyjne
-	\begin{itemize}
-		\item Raspberry Pi
-		\item Beagleboard, Beaglebone
-		\item Pandaboard
-		\item wiele innych
-
-	\end{itemize}
-	\item Możliwość wykorzystania niektórych produktów ,,z półki'' jako zestawu
-	\begin{itemize}
-		\item NAS oparte o PowerPC MPC824x - znane produkty firm Synology, QNAP (sandpoint)
-		\item Linksys NSLU2 (evbarm)
-		\item Nokia N900 (evbarm)
-		\item oraz inne
-	\end{itemize}
-\end{itemize}
+\frametitle{Jądro NetBSD -- autokonfiguracja}
+\begin{center}
+	\includegraphics[scale=0.4]{img_cobaltdmesg.png}
+\end{center}
 \end{frame}
 
 \begin{frame}
@@ -276,11 +249,24 @@
 \end{frame}
 
 
+\section{Budowa aplikacji wbudowanych na NetBSD}
+
+\begin{frame}
+\frametitle{Od czego zacząć?}
+\begin{itemize}
+	\item Pomysł -- patrz poprzedni wykład {\Large \smiley}
+	\item Wybór zestawu ewaluacyjnego (platformy sprzętowej)
+	\item Wybór lub wytworzenie dodatkowych modułów sprzętowych
+	\item Implementacja oprogramowania
+	\item Jeśli produkcja masowa: projekt i budowa własnego sprzętu
+\end{itemize}
+\end{frame}	
+
 \begin{frame}
 \frametitle{Wybór platformy sprzętowej}
 \begin{itemize}
 	\item Czy architektura procesora (powerpc, arm, mips, ...) jest już obsługiwana? 
-	\item Czy platforma, którą chcę wykorzystać jest już obsługiwana?
+	\item Czy platforma sprzetowa, którą chcę wykorzystać jest już obsługiwana?
 	\item Czy wszystkie peryferia są obsługiwane?
 	\item Słowo ,,port'' w terminologii NetBSD
 	\item Dzięki modularnej architekturze NetBSD przeniesienie (,,portowanie'') systemu na nową platformę, czy dodanie wsparcia dla nowego typu procesora jest wzlgędnie proste
@@ -303,16 +289,20 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{App}
+\frametitle{Aplikacja wbudowana w przestrzeni użytkownika}
 \begin{itemize}
-	\item Aplikacja wbudowana jest ,,normalnym'' programem działającym w przestrzeni użytkownika
+	\item Aplikacja wbudowana jest zwykłym programem działającym w przestrzeni użytkownika
+	\item Programista znający rozwiązania open source czuje się ,,jak w domu''
 	\item Standardy API: ANSI C, POSIX, inne typowe dla UNIXa
+	\item Wiele bibliotek w komplecie -- nie ma potrzeby wynajdywania koła na nowo
+	\item Potrzebna dodatkowa funkcjonalność? pkgsrc
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Konfiguracja jądra w systemie wbudowanym}
 \begin{itemize}
+	\item Jądro zbudowane bez modułów
 	\item Plik konfiguracyjny jądra opisuje jakie funkcjonalności oraz jakie sterowniki mają być skompilowane w danym jądrze
 	\item W systemach wbudowanych opartych o NetBSD plik konfiguracyjny jądra określa też pod jakimi adresami znajdują się peryferia
 	\item ...
@@ -320,6 +310,29 @@
 \end{itemize}
 \end{frame}
 
+
+
+
+\begin{frame}
+\frametitle{Sprzęt do rozwoju aplikacji wbudowanych}
+\begin{itemize}
+	\item Łatwo dostępne zestawy uruchomieniowe i ewaluacyjne
+	\begin{itemize}
+		\item Raspberry Pi
+		\item Beagleboard, Beaglebone
+		\item Pandaboard
+		\item wiele innych
+
+	\end{itemize}
+	\item Możliwość wykorzystania niektórych produktów ,,z półki'' jako zestawu
+	\begin{itemize}
+		\item NAS oparte o PowerPC MPC824x - znane produkty firm Synology, QNAP (sandpoint)
+		\item Linksys NSLU2 (evbarm)
+		\item Nokia N900 (evbarm)
+		\item oraz inne
+	\end{itemize}
+\end{itemize}
+\end{frame}
 
 \section{Prosta aplikacja wbudowana}
 
@@ -358,7 +371,7 @@
 \begin{frame}
 \frametitle{Aplikacja wbudowna -- peryferia}
 \begin{itemize}
-	\item Texas Instruments TPS65217B
+	\item Texas Instruments \href{http://www.ti.com/product/tps65217b}{TPS65217B}
 	\item Interfejs - szyna I\textsuperscript{2}C, adres 0x24
 	\item Napięcie wejściowe 5V (USB, zasilacz lub bateria)
 	\item 7 niezależnych regulatorów napięcia
@@ -369,13 +382,16 @@
 
 \begin{frame}
 \frametitle{Architektura aplikacji wbudowanej}
-tu rys. komponentów
+\begin{center}
+\includegraphics[scale=0.42]{img_apparch.pdf}
+\end{center}
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Sterownik układu TPS65217B}
 \begin{itemize}
+	\item Sterownik \href{http://netbsd.gw.com/cgi-bin/man-cgi?tps65217pmic+4+NetBSD-current}{tps65217pmic(4)}
 	\item Źródła
 	\begin{itemize}
 		\item \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/tps65217pmic.c}{src/sys/dev/i2c/tps65217pmic.c}
@@ -391,7 +407,7 @@ tu rys. komponentów
 	\end{itemize}
 	\item Test z powłoki
 	\begin{itemize}
-		\item Polecenie envstat
+		\item Polecenie \href{http://netbsd.gw.com/cgi-bin/man-cgi?envstat+8+NetBSD-current}{envstat(8)}
 	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -401,6 +417,12 @@ tu rys. komponentów
 \begin{itemize}
 	\item NetBSD posiada wbudowany serwer HTTP
 	\item Obsługa CGI (oraz języków skryptowych takich ja PHP, Python z użyciem dodatkowego oprogramowania)
+	\item Najprostsze rozwiązanie dla aplikacji wbudowanej:
+	\begin{itemize}
+		\item Skrypt powłoki wykonywany przez serwer HTTP
+		\item Uruchamia polecenia systemowe
+		\item Przedstawia wynik w formie HTML
+	\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -442,6 +464,7 @@ tu rys. komponentów
 \frametitle{Podsuowanie}
 \begin{itemize}
 	\item NetBSD w zastosowaniach wbudowanych sprawdza się... etc.
+	\item Potwierdza to wykorzystanie komercyjne przez czołowe firmy informatyczne
 \end{itemize}
 \end{frame}
 
