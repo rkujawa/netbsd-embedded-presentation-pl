@@ -82,7 +82,7 @@
 }
 
 \lstset{
-   language=C,
+   language=sh,
    basicstyle=\tiny,
    breaklines=true,
    escapechar=\@,
@@ -145,7 +145,6 @@
 	\item Projekt NetBSD istnieje od 20 lat
 	\item Wywodzi się z Berkeley Software Distribution -- systemu operacyjnego rozwijanego w grupie CSRG na Uniwersytecie w Berkeley, Kalifornia
 	\item Korzenie systemu sięgają kodu oryginalnego UNIXa (1969) -- prawie pół wieku historii
-
 \end{itemize}
 \end{frame}
 
@@ -177,6 +176,7 @@
 	\item Pełni ściśle określone przez twórców funkcje
 	\item Ograniczone możliwości dostosowania i konfiguracji
 	\item Sprzęt oraz oprogramowanie zwykle mocno zintegrowane
+	\item Wysoka niezawodność
 	\item Typowe systemy wbudowane: dekodery TV, telewizory, lodówki, komputery w samochodach, urządzenia sieciowe (routery, switche), sprzęt pomiarowy, systemy alarmowe
 	\item Powoli zaciera się granica między sprzętem wykorzystywanym w systemach wbudowanych a komputerach ogólnego przeznaczenia
 \end{itemize}
@@ -296,6 +296,7 @@
 	\item Standardy API: ANSI C, POSIX, inne typowe dla UNIXa
 	\item Wiele bibliotek w komplecie -- nie ma potrzeby wynajdywania koła na nowo
 	\item Potrzebna dodatkowa funkcjonalność? pkgsrc
+	\item Brak wymagań dot. działania innych procesów -- aplikacja może zastąpić init'a
 \end{itemize}
 \end{frame}
 
@@ -381,7 +382,7 @@
 
 
 \begin{frame}
-\frametitle{Architektura aplikacji wbudowanej}
+\frametitle{Architektura naszej aplikacji wbudowanej}
 \begin{center}
 \includegraphics[scale=0.42]{img_apparch.pdf}
 \end{center}
@@ -412,20 +413,51 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}
+\defverbatim[colored]\lstCGI{%
+\begin{lstlisting}
+#!/bin/sh
+REGULATORS="LDO1 LDO2 LDO3 LDO4 DCDC1 DCDC2 DCDC3"
+echo "Content-type: text/html"
+echo
+echo "<html><body>"
+for i in $REGULATORS
+do 
+	/usr/sbin/envstat | grep "^.*$i" | awk '{ print $2 }'
+	echo <br/>
+done
+echo "</body></html>"
+\end{lstlisting}
+}
+
+\begin{frame}[fragile]
 \frametitle{Serwer HTTP jako interfejs użytkownika}
 \begin{itemize}
-	\item NetBSD posiada wbudowany serwer HTTP
-	\item Obsługa CGI (oraz języków skryptowych takich ja PHP, Python z użyciem dodatkowego oprogramowania)
+	\item NetBSD posiada wbudowany daemon \href{http://netbsd.gw.com/cgi-bin/man-cgi?httpd++NetBSD-current}{httpd(8)}
+	\item Obsługa CGI (oraz języków skryptowych jak PHP, Python)	
 	\item Najprostsze rozwiązanie dla aplikacji wbudowanej:
 	\begin{itemize}
 		\item Skrypt powłoki wykonywany przez serwer HTTP
 		\item Uruchamia polecenia systemowe
 		\item Przedstawia wynik w formie HTML
 	\end{itemize}
+	\item Konfiguracja i uruchomienie:
+	\begin{itemize}
+		\item /etc/rc.conf: httpd=YES httpd\_flags="-c /var/cgi/"
+		\item /etc/rc.d/httpd start
+		\item Skopiowanie skryptu do katalogu /var/cgi/
+	\end{itemize}
+
 \end{itemize}
+\lstCGI
 \end{frame}
 
+\begin{frame}
+\frametitle{To działa!}
+\begin{itemize}
+	\item Skieruj przeglądarkę na adres http://adres\_beaglebone/cgi-bin/voltages.cgi
+	\item Proste dzięki wykorzystaniu technik i narzędzi znanych z systemów serwerowych
+\end{itemize}
+\end{frame}
 
 \begin{frame}
 \frametitle{Co można zrobić dalej w tej aplikacji?}
