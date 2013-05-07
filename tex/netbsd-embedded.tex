@@ -131,21 +131,31 @@
 
 \begin{frame}
 \frametitle{Czym jest NetBSD?}
+\begin{columns}[c]
+\column{3in}
 \begin{itemize}
 	\item UNIX-owy system operacyjny
 	\item Nie tylko jądro, ale \textbf{kompletny} system operacyjny
 	\item Dostarcza także interfejs graficzny (X Window System)
 	\item Oprogramowanie producentów trzecich dostępne poprzez pkgsrc (ponad 12000 paczek)
 \end{itemize}
+\column{1in}
+\includegraphics[scale=0.25]{NetBSD.png}
+\end{columns}
 \end{frame}
 
 \begin{frame}
 \frametitle{Historia NetBSD w pigułce}
+\begin{columns}[c]
+\column{3in}
 \begin{itemize}
 	\item Projekt NetBSD istnieje od 20 lat
 	\item Wywodzi się z Berkeley Software Distribution -- systemu operacyjnego rozwijanego w grupie CSRG na Uniwersytecie w Berkeley, Kalifornia
 	\item Korzenie systemu sięgają kodu oryginalnego UNIXa (1969) -- prawie pół wieku historii
 \end{itemize}
+\column{1in}
+\includegraphics[scale=0.5]{img_bsddaemon.jpg}
+\end{columns}
 \end{frame}
 
 \begin{frame}
@@ -156,8 +166,8 @@
 	\item Przykładanie uwagi do ,,czystości'' projektu oraz implementacji
 	\item W zgodzie z duchem UNIXa
 	\item Kompletna dokumentacja interfejsów programistycznych
-	\item Ostrożne podejście do nowinek
-	\item Niski ,,próg wejścia'' dla nowych programistów
+	\item Ostrożne podejście do nowości technologicznych
+%	\item Niski ,,próg wejścia'' dla nowych programistów
 	\item Powyższe cechy czynią NetBSD doskonałym systemem operacyjnym dla:
 	\begin{itemize}
 		\item \textbf{Rozwiązań wbudowanych}
@@ -177,7 +187,7 @@
 	\item Ograniczone możliwości dostosowania i konfiguracji
 	\item Sprzęt oraz oprogramowanie zwykle mocno zintegrowane
 	\item Wysoka niezawodność
-	\item Typowe systemy wbudowane: dekodery TV, telewizory, lodówki, komputery w samochodach, urządzenia sieciowe (routery, switche), sprzęt pomiarowy, systemy alarmowe
+	\item Typowe systemy wbudowane: urządzenia sieciowe (routery, switche), sprzęt pomiarowy, komputery w samochodach, systemy alarmowe, dekodery TV, telewizory, lodówki
 	\item Powoli zaciera się granica między sprzętem wykorzystywanym w systemach wbudowanych a komputerach ogólnego przeznaczenia
 \end{itemize}
 \end{frame}
@@ -234,21 +244,6 @@
 \end{center}
 \end{frame}
 
-\begin{frame}
-\frametitle{Budowanie NetBSD ze źródeł}
-\begin{itemize}
-	\item Procedura budowania systemu ze źródeł jest trywialna
-	\begin{itemize}
-		\item Ściągnięcie kodu źródłowego NetBSD
-		\item \tt{./build.sh -m [port] tools}
-		\item \tt{./build.sh -m [port] distribution}
-	\end{itemize}
-	\item Skrypt build.sh jest tylko opakowauje standardowe pliki Makefile
-	\item Kompilacja wskrośna całego systemu możliwa z prawie każdego innego systemu UNIX-owego (Linux, MacOS X, *BSD, Solaris, itd.), także o innej architekturze procesora
-\end{itemize}
-\end{frame}
-
-
 \section{Budowa aplikacji wbudowanych na NetBSD}
 
 \begin{frame}
@@ -274,7 +269,55 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Dostęp do sprzętu w aplikacji wbudowanej}
+\frametitle{Sprzęt do rozwoju aplikacji wbudowanych}
+\begin{itemize}
+	\item Łatwo dostępne zestawy uruchomieniowe i ewaluacyjne
+	\begin{itemize}
+		\item Raspberry Pi (evbarm)
+		\item Beagleboard, Beaglebone (evbarm)
+		\item Freescale TWR-P1025 (evbppc)
+		\item Pandaboard (evbarm)
+		\item wiele innych
+	\end{itemize}
+	\item Możliwość wykorzystania niektórych produktów ,,z półki'' jako zestawu
+	\begin{itemize}
+		\item NAS oparte o PowerPC MPC824x - znane produkty firm Synology, QNAP (sandpoint)
+		\item Linksys NSLU2 (evbarm)
+		\item Nokia N900 (evbarm)
+		\item oraz inne
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dodatkowe moduły sprzętowe}
+\begin{itemize}
+	\item Wiele standardów i producentów gotowych modułów
+		\begin{itemize}
+			\item Digilent - \href{http://www.digilentinc.com/Products/Catalog.cfm?NavPath=2,401&Cat=9}{Pmod}
+			\item Kamami - \href{http://kamami.pl/index.php?categoryID=3308}{KAmod}
+			\item Beaglebone - \href{http://circuitco.com/support/index.php?title=BeagleBone_Capes}{Cape}
+			\item Arduino - Shield
+			\item ...
+		\end{itemize}
+	\item Czy dany moduł będzie kompatybilny z moją platformą?
+	\begin{itemize}
+		\item Wykorzystywana szyna
+			\begin{itemize}
+				\item I\textsuperscript{2}C
+				\item SPI 
+				\item GPIO
+				\item Szyna procesora
+				\item ...
+			\end{itemize}
+		\item Wymagane zasilanie
+		\item Wymiary płytki
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dostęp do sprzętu w aplikacji}
 \begin{itemize}
 	\item W systemach opartych na 8-bitowych oraz 16-bitowych mikrokontrolerach zwyczajem jest bezpośredni dostęp do sprzętu
 	\item NetBSD jako tradycyjny system UNIX-owy implementuje ochronę pamięci i pamięć wirtualną
@@ -291,12 +334,12 @@
 \begin{frame}
 \frametitle{Aplikacja wbudowana w przestrzeni użytkownika}
 \begin{itemize}
-	\item Aplikacja wbudowana jest zwykłym programem działającym w przestrzeni użytkownika
+	\item W przypadku NetBSD aplikacja wbudowana jest zwykłym programem działającym w przestrzeni użytkownika
 	\item Programista znający rozwiązania open source czuje się ,,jak w domu''
 	\item Standardy API: ANSI C, POSIX, inne typowe dla UNIXa
 	\item Wiele bibliotek w komplecie -- nie ma potrzeby wynajdywania koła na nowo
 	\item Potrzebna dodatkowa funkcjonalność? pkgsrc
-	\item Brak wymagań dot. działania innych procesów -- aplikacja może zastąpić init'a
+	\item Brak wymagań dot. działania innych procesów -- aplikacja może zastąpić proces /sbin/init
 \end{itemize}
 \end{frame}
 
@@ -306,34 +349,26 @@
 	\item Jądro zbudowane bez modułów
 	\item Plik konfiguracyjny jądra opisuje jakie funkcjonalności oraz jakie sterowniki mają być skompilowane w danym jądrze
 	\item W systemach wbudowanych opartych o NetBSD plik konfiguracyjny jądra określa też pod jakimi adresami znajdują się peryferia
-	\item ...
+	\item ... TODO
 	\item W Linux i FreeBSD przyjęto inne rozwiązanie do tego samego celu - Flattened Device Tree
 \end{itemize}
 \end{frame}
 
-
-
-
 \begin{frame}
-\frametitle{Sprzęt do rozwoju aplikacji wbudowanych}
+\frametitle{Budowanie NetBSD ze źródeł}
 \begin{itemize}
-	\item Łatwo dostępne zestawy uruchomieniowe i ewaluacyjne
+	\item Procedura budowania systemu ze źródeł jest trywialna
 	\begin{itemize}
-		\item Raspberry Pi
-		\item Beagleboard, Beaglebone
-		\item Pandaboard
-		\item wiele innych
-
+		\item Ściągnięcie kodu źródłowego NetBSD
+		\item \tt{./build.sh -m [port] tools}
+		\item \tt{./build.sh -m [port] distribution}
 	\end{itemize}
-	\item Możliwość wykorzystania niektórych produktów ,,z półki'' jako zestawu
-	\begin{itemize}
-		\item NAS oparte o PowerPC MPC824x - znane produkty firm Synology, QNAP (sandpoint)
-		\item Linksys NSLU2 (evbarm)
-		\item Nokia N900 (evbarm)
-		\item oraz inne
-	\end{itemize}
+	\item Skrypt build.sh jest tylko opakowauje standardowe pliki Makefile
+	\item Kompilacja wskrośna całego systemu możliwa z prawie każdego innego systemu UNIX-owego (Linux, MacOS X, *BSD, Solaris, itd.), także o innej architekturze procesora
 \end{itemize}
 \end{frame}
+
+
 
 \section{Prosta aplikacja wbudowana}
 
@@ -468,15 +503,24 @@ mcp980x0 at iic1 addr 0x48: Microchip MCP980x Temperature Sensor
 \end{verbatim}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]
 \frametitle{Komunikacja z przestrzenią użytkownika}
 \begin{itemize}
 	\item Sterownik wykorzystuje interfejs \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon_envsys+9+NetBSD-current}{sysmon\_envsys(4)} do przekazywania danych do przestrzeni użytkownika
+	\item Plik urządzenia /dev/sysmon stanowi styk jądra z przestrzenią użytkownika
 	\item Test z powłoki
 	\begin{itemize}
 		\item Polecenie \href{http://netbsd.gw.com/cgi-bin/man-cgi?envstat+8+NetBSD-current}{envstat(8)}
 	\end{itemize}
 \end{itemize}
+\scriptsize
+\begin{verbatim}
+# envstat
+                  Current  CritMax  WarnMax  WarnMin  CritMin  Unit
+[mcp980x0]
+  Ambient temp:    25.000                                      degC
+...
+\end{verbatim}
 \end{frame}
 
 \defverbatim[colored]\lstCGI{%
@@ -516,9 +560,22 @@ echo "</body></html>"
 \begin{frame}
 \frametitle{To działa!}
 \begin{itemize}
-	\item Skieruj przeglądarkę na adres http://adres\_beaglebone/cgi-bin/temp.cgi
+	\item TODO
+	\item http://adres\_beaglebone/cgi-bin/temp.cgi
 	\item Proste dzięki wykorzystaniu technik i narzędzi znanych z systemów serwerowych
-	\item Jak zaimplementować historię?
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Jak zaimplementować historię?}
+\begin{itemize}
+	\item Format RRD -- Round Robin Database
+	\item Narzędzie rrdtool
+	\item Skrypt uruchamiany cron'a próbkuje temperaturę
+	\item Próbka zapisywana jest do bazy RRD
+	\item Zestaw skryptów uruchamianych z cron'a generuje wykresy na podstawie danych w bazie (ostatnia godzina, dzień, tydzień)
+	\item Wykresy zapisywane są do katalogu udostępnionego przez serwer HTTP
+
 \end{itemize}
 \end{frame}
 
@@ -540,14 +597,27 @@ echo "</body></html>"
 %\end{frame}
 
 \begin{frame}
+\frametitle{Co można zrobić dalej w tej aplikacji?}
+\begin{itemize}
+	\item Budowa ,,stacji pogody''
+	\item Wyświetlanie temperatury na LCD (tekstowym lub graficznym)
+	\item Przełączanie widoku na LCD za pomocą przycisków -- wykorzystanie linii GPIO
+	\item Wyświetlanie historii z zadanego okresu
+	\item Możliwość rekonfiguracji w trakcie pracy (np. dokładności czujnika, częstotliwości zapisu próbek, etc.)
+	\item Monitoring ciśnienia z użyciem dodatkowego czujnika (np. \href{http://www.freescale.com/files/sensors/doc/data_sheet/MPL115A2.pdf}{MPL115A2})
+	\item Pobieranie prognozy z internetu
+\end{itemize}
+\end{frame}
+
+\begin{frame}
 \frametitle{Propozycje innych prostych systemów wbudowanych}
 \begin{itemize}
 	\item Do zrealizowania z użyciem BealgeBone oraz dodatkowych modułów
 	\begin{itemize}
-		\item Stacja pogody (np. dodatkowy czujnik MPL115A2, wyświetlacz LCD, przyciski)
-		\item Odtwarzacz audio (np. przetwornik TS4657, wyświetlacz LCD, przyciski)
+		\item Odtwarzacz audio (np. przetwornik C/A TS4657, wyświetlacz LCD, przyciski)
 		\item foo
 		\item bar
+		\item TODO
 	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -558,9 +628,11 @@ echo "</body></html>"
 \begin{frame}
 \frametitle{Podsuowanie}
 \begin{itemize}
+	\item TODO
 	\item NetBSD w zastosowaniach wbudowanych sprawdza się... etc.
-	\item Potwierdza to wykorzystanie komercyjne przez czołowe firmy informatyczne
-\end{itemize}
+	\item Potwierdza to wykorzystanie komercyjne przez czołowe firmy
+	\item Tere fere TODO
+	\end{itemize}
 \end{frame}
 
 
