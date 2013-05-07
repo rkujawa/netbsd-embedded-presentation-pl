@@ -362,50 +362,116 @@
 \begin{frame}
 \frametitle{Aplikacja wbudowana -- założenia funkcjonalne}
 \begin{itemize}
-	\item System wbudowany -- monitoring regulacji napięcia
-	\item Odczyt obecnego stanu regulatorów dostępnych na BeagleBone
-	\item Webowy interfejs użytkownika pozwalający na przedstawienie obecnego stanu regulatorów
+	\item Pomiar temperatury otoczenia
+	\item Wyświetlanie wartości chwilowej temperatury przez interfejs web
+	\item Przechowywanie danych historycznych
+	\item Wyświetlanie danych historycznych przez interfejs web
 \end{itemize}
 \end{frame}
 
+%\begin{frame}
+%\frametitle{Aplikacja wbudowana -- założenia funkcjonalne}
+%\begin{itemize}
+%	\item System wbudowany -- monitoring regulacji napięcia
+%	\item Odczyt obecnego stanu regulatorów dostępnych na BeagleBone
+%	\item Webowy interfejs użytkownika pozwalający na przedstawienie obecnego stanu regulatorów
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}
 \frametitle{Aplikacja wbudowna -- peryferia}
+\begin{columns}[c]
+\column{3in}
 \begin{itemize}
-	\item Texas Instruments \href{http://www.ti.com/product/tps65217b}{TPS65217B}
-	\item Interfejs - szyna I\textsuperscript{2}C, adres 0x24
-	\item Napięcie wejściowe 5V (USB, zasilacz lub bateria)
-	\item 7 niezależnych regulatorów napięcia
+	\item Moduł KAmodTEM firmy Kamami
+	\begin{itemize}
+		\item Półprzewodnikowy czujnik temperatury Microchip \href{http://www.microchip.com/wwwproducts/Devices.aspx?dDocName=en020950}{MCP9801}
+		\item Interfejs - szyna I\textsuperscript{2}C, domyślny adres 0x48
+		\item Pomiar w zakresie --55 do +125 $^\circ$C 
+		\item +V 2,7 do 5,5 VDC
+	\end{itemize}
 \end{itemize}
-\includegraphics[width=300pt]{img_am335x-tps65217.pdf}
+\column{1.5in}
+	\includegraphics[scale=0.3]{img_kamodtem.jpg}
+\end{columns}
+\includegraphics[width=300pt]{img_am335x-mcp9801.pdf}
 \end{frame}
+
+
+%\begin{frame}
+%\frametitle{Aplikacja wbudowna -- peryferia}
+%\begin{itemize}
+%	\item Texas Instruments \href{http://www.ti.com/product/tps65217b}{TPS65217B}
+%	\item Interfejs - szyna I\textsuperscript{2}C, adres 0x24
+%	\item Napięcie wejściowe 5V (USB, zasilacz lub bateria)
+%	\item 7 niezależnych regulatorów napięcia
+%\end{itemize}
+%\includegraphics[width=300pt]{img_am335x-tps65217.pdf}
+%\end{frame}
 
 
 \begin{frame}
 \frametitle{Architektura naszej aplikacji wbudowanej}
 \begin{center}
-\includegraphics[scale=0.42]{img_apparch.pdf}
+\includegraphics[scale=0.42]{img_apparch-mcp9801.pdf}
 \end{center}
 \end{frame}
 
+%\begin{frame}
+%\frametitle{Sterownik układu TPS65217B}
+%\begin{itemize}
+%	\item Sterownik \href{http://netbsd.gw.com/cgi-bin/man-cgi?tps65217pmic+4+NetBSD-current}{tps65217pmic(4)}
+%	\item Źródła
+%	\begin{itemize}
+%		\item \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/tps65217pmic.c}{src/sys/dev/i2c/tps65217pmic.c}
+%		\item \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/tps65217pmicreg.h}{src/sys/dev/i2c/tps65217pmicreg.h}
+%		\item Rejestracja istnienia sterownika w \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/files.i2c}{files.i2c}
+%	\end{itemize}
+%	\item Wykorzystuje niezależny od platformy sterownik szyny I\textsuperscript{2}C - \href{http://netbsd.gw.com/cgi-bin/man-cgi?iic+9+NetBSD-current}{iic(4)}
+%	\item Wykorzystuje interfejs \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon_envsys+9+NetBSD-current}{sysmon\_envsys(4)} do przekazywania danych do przestrzeni użytkownika
+%	\item Konfiguracja jądra
+%	\begin{itemize}
+%		\item \href{http://nxr.netbsd.org/xref/src/sys/arch/evbarm/conf/BEAGLEBONE}{src/sys/arch/evbarm/conf/BEAGLEBONE}
+%		\item tps65217pmic*	at iic0 addr 0x24
+%	\end{itemize}
+%	\item Test z powłoki
+%	\begin{itemize}
+%		\item Polecenie \href{http://netbsd.gw.com/cgi-bin/man-cgi?envstat+8+NetBSD-current}{envstat(8)}
+%	\end{itemize}
+%\end{itemize}
+%\end{frame}
 
-\begin{frame}
-\frametitle{Sterownik układu TPS65217B}
+\begin{frame}[fragile]
+\frametitle{Sterownik układów MCP980x}
 \begin{itemize}
-	\item Sterownik \href{http://netbsd.gw.com/cgi-bin/man-cgi?tps65217pmic+4+NetBSD-current}{tps65217pmic(4)}
+	\item Sterownik mcp980x
+	%\href{http://netbsd.gw.com/cgi-bin/man-cgi?mcp980x+4+NetBSD-current}{mcp980x(4)}
 	\item Źródła
 	\begin{itemize}
-		\item \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/tps65217pmic.c}{src/sys/dev/i2c/tps65217pmic.c}
-		\item \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/tps65217pmicreg.h}{src/sys/dev/i2c/tps65217pmicreg.h}
-		\item Rejestracja istnienia sterownika w \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/files.i2c}{files.i2c}
+		\item \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/mcp980x.c}{src/sys/dev/i2c/mcp980x.c}
+		\item \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/mcp980xreg.h}{src/sys/dev/i2c/mcp980xreg.h}
+		\item Zarejestrowany w \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/files.i2c}{files.i2c}
 	\end{itemize}
 	\item Wykorzystuje niezależny od platformy sterownik szyny I\textsuperscript{2}C - \href{http://netbsd.gw.com/cgi-bin/man-cgi?iic+9+NetBSD-current}{iic(4)}
-	\item Wykorzystuje interfejs \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon_envsys+9+NetBSD-current}{sysmon\_envsys(4)} do przekazywania danych do przestrzeni użytkownika
 	\item Konfiguracja jądra
 	\begin{itemize}
 		\item \href{http://nxr.netbsd.org/xref/src/sys/arch/evbarm/conf/BEAGLEBONE}{src/sys/arch/evbarm/conf/BEAGLEBONE}
-		\item tps65217pmic*	at iic0 addr 0x24
+		\item mcp980x* at iic1 addr 0x48
 	\end{itemize}
+	\item Komunikaty w buforze jądra podczas startu
+\end{itemize}
+\scriptsize
+\begin{verbatim}
+tiiic1 at obio0 addr 0x4802a000-0x4802afff intr 71: rev 0.11
+iic1 at tiiic1: I2C bus
+mcp980x0 at iic1 addr 0x48: Microchip MCP980x Temperature Sensor
+\end{verbatim}
+\end{frame}
+
+\begin{frame}
+\frametitle{Komunikacja z przestrzenią użytkownika}
+\begin{itemize}
+	\item Sterownik wykorzystuje interfejs \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon_envsys+9+NetBSD-current}{sysmon\_envsys(4)} do przekazywania danych do przestrzeni użytkownika
 	\item Test z powłoki
 	\begin{itemize}
 		\item Polecenie \href{http://netbsd.gw.com/cgi-bin/man-cgi?envstat+8+NetBSD-current}{envstat(8)}
@@ -416,15 +482,11 @@
 \defverbatim[colored]\lstCGI{%
 \begin{lstlisting}
 #!/bin/sh
-REGULATORS="LDO1 LDO2 LDO3 LDO4 DCDC1 DCDC2 DCDC3"
 echo "Content-type: text/html"
 echo
 echo "<html><body>"
-for i in $REGULATORS
-do 
-	/usr/sbin/envstat | grep "^.*$i" | awk '{ print $2 }'
-	echo <br/>
-done
+/usr/sbin/envstat | grep -i "^.*Ambient" | awk '{ print $3 }'
+echo st. C<br/>
 echo "</body></html>"
 \end{lstlisting}
 }
@@ -454,34 +516,35 @@ echo "</body></html>"
 \begin{frame}
 \frametitle{To działa!}
 \begin{itemize}
-	\item Skieruj przeglądarkę na adres http://adres\_beaglebone/cgi-bin/voltages.cgi
+	\item Skieruj przeglądarkę na adres http://adres\_beaglebone/cgi-bin/temp.cgi
 	\item Proste dzięki wykorzystaniu technik i narzędzi znanych z systemów serwerowych
+	\item Jak zaimplementować historię?
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Co można zrobić dalej w tej aplikacji?}
-\begin{itemize}
-	\item Wyświetlanie napięć na zewnętrznym LCD (tekstowym lub graficznym)
-	\item Przełączanie widoku na LCD za pomocą przycisków
-	\item Przechowywanie i wyświetlanie danych historycznych
-	\item Monitoring rzeczywistego napięcia na wyjściach
-	\begin{itemize}
-		\item Wykorzystanie wyjścia MUX\_OUT
-		\item Konwersja A/C w AM335x (linia A7)
-	\end{itemize}
-	\item Możliwość rekonfiguracji regulatorów w trakcie pracy
-	\item Obsługa zasilania bateryjnego (ładowanie, monitoring stanu baterii)
-	\item Obsługa przerwań (linia NNMI)
-\end{itemize}
-\end{frame}
+%\begin{frame}
+%\frametitle{Co można zrobić dalej w tej aplikacji?}
+%\begin{itemize}
+%	\item Wyświetlanie napięć na zewnętrznym LCD (tekstowym lub graficznym)
+%	\item Przełączanie widoku na LCD za pomocą przycisków
+%	\item Przechowywanie i wyświetlanie danych historycznych
+%	\item Monitoring rzeczywistego napięcia na wyjściach
+%	\begin{itemize}
+%		\item Wykorzystanie wyjścia MUX\_OUT
+%		\item Konwersja A/C w AM335x (linia A7)
+%	\end{itemize}
+%	\item Możliwość rekonfiguracji regulatorów w trakcie pracy
+%	\item Obsługa zasilania bateryjnego (ładowanie, monitoring stanu baterii)
+%	\item Obsługa przerwań (linia NNMI)
+%\end{itemize}
+%\end{frame}
 
 \begin{frame}
 \frametitle{Propozycje innych prostych systemów wbudowanych}
 \begin{itemize}
 	\item Do zrealizowania z użyciem BealgeBone oraz dodatkowych modułów
 	\begin{itemize}
-		\item Stacja pogody (np. czujniki MPL115A2, MCP9801, wyświetlacz LCD)
+		\item Stacja pogody (np. dodatkowy czujnik MPL115A2, wyświetlacz LCD, przyciski)
 		\item Odtwarzacz audio (np. przetwornik TS4657, wyświetlacz LCD, przyciski)
 		\item foo
 		\item bar
