@@ -149,9 +149,12 @@
 \begin{columns}[c]
 \column{3in}
 \begin{itemize}
-	\item Projekt NetBSD istnieje od 20 lat
-	\item Wywodzi się z Berkeley Software Distribution -- systemu operacyjnego rozwijanego w grupie CSRG na Uniwersytecie w Berkeley, Kalifornia
-	\item Korzenie systemu sięgają kodu oryginalnego UNIXa (1969) -- prawie pół wieku historii
+	\item 1969 -- UNIX powstaje w Bell Labs
+	\item 1974-1995 -- Berkeley Software Distribution -- system operacyjny rozwijany w grupie CSRG na Uniwersytecie w Berkeley
+	\item 1993 -- powstaje projekt NetBSD na bazie 4.3BSD i 386BSD
+	\item 1994 -- NetBSD 1.0
+	\item ...
+	\item 2012 -- NetBSD 6.0
 \end{itemize}
 \column{1in}
 \includegraphics[scale=0.5]{img_bsddaemon.jpg}
@@ -214,7 +217,7 @@
 \item{Kto pracuje nad NetBSD?}
 \begin{itemize}
 	\item Niezależni developerzy zrzeszeni w fundacji NetBSD
-	\item Firmy - w ramach projektów lub kontraktów (np. Semihalf, 3am Software Foundry, Genetec, inni)
+	\item Firmy - konsulting w ramach projektów lub kontraktów (np. Semihalf, 3am Software Foundry, Genetec, inni)
 \end{itemize}
 
 \end{itemize}
@@ -237,9 +240,42 @@
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]
+\frametitle{Jądro NetBSD -- autokonfiguracja}
+\tiny
+\begin{verbatim}
+NetBSD 6.99.12 (GENERIC) #7: Fri Oct  5 18:43:21 CEST 2012
+        rkujawa@saiko.local:/Users/rkujawa/netbsd-eurobsdcon2012/src/sys/arch/cobalt/compile/obj/GENERIC
+Cobalt Qube 2
+total memory = 32768 KB
+avail memory = 27380 KB
+mainbus0 (root)
+com0 at mainbus0 addr 0x1c800000 level 3: ns16550a, working fifo
+com0: console
+cpu0 at mainbus0: QED RM5200 CPU (0x28a0) Rev. 10.0 with built-in FPU Rev. 1.0
+cpu0: 48 TLB entries, 256MB max page size
+cpu0: 32KB/32B 2-way set-associative L1 instruction cache
+cpu0: 32KB/32B 2-way set-associative write-back L1 data cache
+mcclock0 at mainbus0 addr 0x10000070: mc146818 compatible time-of-day clock
+panel0 at mainbus0 addr 0x1f000000
+gt0 at mainbus0 addr 0x14000000
+pci0 at gt0
+pchb0 at pci0 dev 0 function 0: Galileo GT-64011 System Controller, rev 1
+pcib0 at pci0 dev 9 function 0
+pcib0: VIA Technologies VT82C586 PCI-ISA Bridge, rev 57
+viaide0 at pci0 dev 9 function 1
+viaide0: VIA Technologies VT82C586 (Apollo VP) ATA33 controller
+viaide0: primary channel interrupting at irq 14
+atabus0 at viaide0 channel 0
+viaide0: secondary channel interrupting at irq 15
+atabus1 at viaide0 channel 1
+wd0 at atabus0 drive 0
+wd0: <netbsd-cobalt.img>
+wd0: 750 MB, 1524 cyl, 16 head, 63 sec, 512 bytes/sect x 1536192 sectors\end{verbatim}
+\end{frame}
 
 \begin{frame}
-\frametitle{Jądro NetBSD -- autokonfiguracja}
+\frametitle{Jądro NetBSD -- autokonfiguracja c.d.}
 \begin{center}
 	\includegraphics[scale=0.4]{img_cobaltdmesg.png}
 \end{center}
@@ -333,6 +369,21 @@
 \end{frame}
 
 \begin{frame}
+\frametitle{Sterowniki w NetBSD}
+\begin{itemize}
+	\item Sterownik -- interfejs między sprzętem a przestrzenią użytkownika, zaimplementowany jako element jądra
+	\item Mechanizmy jądra takie jak {\tt \href{http://netbsd.gw.com/cgi-bin/man-cgi?bus_space++NetBSD-current}{bus\_space(9)}} standaryzują sposób pisania sterowników
+	\item Pisanie sterowników dla NetBSD wymaga znajomości:
+	\begin{itemize}
+		\item Języka C
+		\item Sprzętu, który ma być obsługiwany przez sterownik (dokumentacja)
+		\item Interfejsów jądra NetBSD
+	\end{itemize}
+%	\item foo
+\end{itemize}
+\end{frame}
+
+\begin{frame}
 \frametitle{Aplikacja wbudowana w przestrzeni użytkownika}
 \begin{itemize}
 	\item W przypadku NetBSD aplikacja wbudowana jest zwykłym programem działającym w przestrzeni użytkownika
@@ -340,7 +391,7 @@
 	\item Standardy API: ANSI C, POSIX, inne typowe dla UNIXa
 	\item Wiele bibliotek w komplecie -- nie ma potrzeby wynajdywania koła na nowo
 	\item Potrzebna dodatkowa funkcjonalność? pkgsrc
-	\item Brak wymagań dot. działania innych procesów -- aplikacja może zastąpić proces /sbin/init
+	\item Brak wymagań dot. działania innych procesów -- aplikacja może zastąpić proces {\tt /sbin/init}
 \end{itemize}
 \end{frame}
 
@@ -349,8 +400,7 @@
 \begin{itemize}
 	\item Jądro zbudowane bez modułów
 	\item Plik konfiguracyjny jądra opisuje jakie funkcjonalności oraz jakie sterowniki mają być skompilowane w danym jądrze
-	\item W systemach wbudowanych opartych o NetBSD plik konfiguracyjny jądra określa też pod jakimi adresami znajdują się peryferia
-	\item ... TODO
+	\item W systemach wbudowanych opartych o NetBSD plik konfiguracyjny jądra określa też na jakich szynach i pod jakimi adresami znajdują się peryferia
 	\item W Linux i FreeBSD przyjęto inne rozwiązanie do tego samego celu - Flattened Device Tree
 \end{itemize}
 \end{frame}
@@ -480,7 +530,7 @@
 \begin{frame}[fragile]
 \frametitle{Sterownik układów MCP980x}
 \begin{itemize}
-	\item Sterownik mcp980x
+	\item Sterownik \href{http://netbsd.gw.com/cgi-bin/man-cgi?mcp980x+4+NetBSD-current}{mcp980x(4)}
 	%\href{http://netbsd.gw.com/cgi-bin/man-cgi?mcp980x+4+NetBSD-current}{mcp980x(4)}
 	\item Źródła
 	\begin{itemize}
@@ -507,8 +557,8 @@ mcp980x0 at iic1 addr 0x48: Microchip MCP980x Temperature Sensor
 \begin{frame}[fragile]
 \frametitle{Komunikacja z przestrzenią użytkownika}
 \begin{itemize}
-	\item Sterownik wykorzystuje interfejs \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon_envsys+9+NetBSD-current}{sysmon\_envsys(4)} do przekazywania danych do przestrzeni użytkownika
-	\item Plik urządzenia /dev/sysmon stanowi styk jądra z przestrzenią użytkownika
+	\item Sterownik wykorzystuje interfejs \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon_envsys+9+NetBSD-current}{sysmon\_envsys(9)} do przekazywania danych do przestrzeni użytkownika
+	\item Plik urządzenia /dev/sysmon (\href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon+4+NetBSD-current}{sysmon(4)}) stanowi styk jądra z przestrzenią użytkownika
 	\item Test z powłoki
 	\begin{itemize}
 		\item Polecenie \href{http://netbsd.gw.com/cgi-bin/man-cgi?envstat+8+NetBSD-current}{envstat(8)}
@@ -565,6 +615,11 @@ echo "</body></html>"
 	\begin{itemize}
 		\item http://adres\_beaglebone/cgi-bin/temp.cgi
 	\end{itemize}
+	\item Serwer HTTP wykonuje skrypt CGI, który uruchamia polecenie \href{http://netbsd.gw.com/cgi-bin/man-cgi?envstat++NetBSD-current}{envstat(8)}
+	\item Polecenie to komunikuje się z interfejsem \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon++NetBSD-current}{sysmon(4)} poprzez plik urządzenia /dev/sysmon
+	\item Podsystem ten odpytuje sterownik \href{http://netbsd.gw.com/cgi-bin/man-cgi?mcp980x++NetBSD-current}{mcp980x(4)} o temperaturę
+	\item Sterownik komunikuje się z modułem KAmodTEM używając warstwy iic(4) (a pod spodem sterownika  I\textsuperscript{2}C właściwego dla danego kontrolera)
+	\item Skrypt z wyniku envstat wybiera bierzącą temperaturę, opakowuje ją w HTML
 \end{itemize}
 \end{frame}
 
@@ -573,14 +628,78 @@ echo "</body></html>"
 \begin{itemize}
 	\item Format RRD -- Round Robin Database
 	\item Narzędzie rrdtool
-	\item Skrypt uruchamiany cron'a próbkuje temperaturę
+	\item Skrypt uruchamiany za pomocą cron'a próbkuje temperaturę
 	\item Próbka zapisywana jest do bazy RRD
 	\item Zestaw skryptów uruchamianych z cron'a generuje wykresy na podstawie danych w bazie (ostatnia godzina, dzień, tydzień)
 	\item Wykresy zapisywane są do katalogu udostępnionego przez serwer HTTP
-
 \end{itemize}
 \end{frame}
 
+\defverbatim[colored]\lstrrdupdate{%
+\begin{lstlisting}
+#!/bin/sh
+/usr/pkg/bin/rrdtool update /var/www/rrd/temp.rrd \ 
+`date +%s`:`envstat | grep Ambient | awk '{ print $3 }'
+\end{lstlisting}
+}
+
+\defverbatim[colored]\lstrrdgraph{%
+\begin{lstlisting}
+#!/bin/sh
+/usr/pkg/bin/rrdtool graph $1 -X 0 --end now --start end-$2 --width 600 \
+DEF:temp=/var/www/rrd/temp.rrd:temp:AVERAGE \
+LINE1:temp#0000FF:"MCP9801 ambient temperature\l"
+\end{lstlisting}
+}
+
+\begin{frame}[fragile]
+\frametitle{Dane historyczne - skrypty i ich wykonanie}
+\begin{itemize}
+	\item crontab
+\end{itemize}
+\scriptsize
+\begin{verbatim}
+# m h d m t komenda
+*/1		*	*	*	*	/opt/temp-update.sh
+*/2		*	*	*	*	/opt/temp-graph.sh /var/www/rrd/temp-hour.png 1hour
+*/10	*	*	*	*	/opt/temp-graph.sh /var/www/rrd/temp-day.png 1day
+*/30	*	*	*	*	/opt/temp-graph.sh /var/www/rrd/temp-week.png 1week
+\end{verbatim}
+\normalsize
+\begin{itemize}
+	\item Zapis próbek do bazy -- temp-update.sh
+\end{itemize}
+\lstrrdupdate
+\begin{itemize}
+	\item Skrypt generujący wykresy -- temp-graph.sh
+\end{itemize}
+\lstrrdgraph
+\begin{verbatim}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Przeglądanie historii}
+\begin{itemize}
+	\item W wyniku działania skryptów w /var/www/rrd/ odkładane są gotowe wykresy
+	\item Wyświetlanie wszystkich wykresów możliwe jest z jednego pliku HTML -- /var/www/history.html
+	\item Test:
+	\begin{itemize}
+		\item http://adres\_beaglebone/history.html
+	\end{itemize}
+\end{itemize}
+\scriptsize
+\begin{verbatim}
+<html><body><center>
+History: last hour<br/>
+<img src="rrd/temp-hour.png"><br/><br/>
+History: last day<br/>
+<img src="rrd/temp-day.png"><br/><br/>
+History: last week<br/>
+<img src="rrd/temp-week.png"><br/>
+</center></body></html>
+\end{verbatim}
+\end{frame}
 %\begin{frame}
 %\frametitle{Co można zrobić dalej w tej aplikacji?}
 %\begin{itemize}
@@ -614,12 +733,21 @@ echo "</body></html>"
 \begin{frame}
 \frametitle{Propozycje innych prostych systemów wbudowanych}
 \begin{itemize}
-	\item Do zrealizowania z użyciem BealgeBone oraz dodatkowych modułów
+	\item Możliwe do zrealizowania z użyciem BealgeBone oraz dodatkowych modułów
 	\begin{itemize}
-		\item Odtwarzacz audio (np. przetwornik C/A TS4657, wyświetlacz LCD, przyciski)
-		\item Sterowanie oświetleniem (moduł z przekaźnikami, LCD, przyciski)
-		\item bar
-		\item TODO
+		\item Odtwarzacz audio
+		\begin{itemize}
+			\item przetwornik C/A (np. TS4657)
+			\item wyświetlacz LCD (np. HD44xxx)
+			\item przyciski
+		\end{itemize}
+		\item Sterowanie oświetleniem
+		\begin{itemize}
+			\item moduł z przekaźnikami
+			\item wyświetlacz LCD
+			\item przyciski
+		\end{itemize}
+		\item ...
 	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -634,7 +762,7 @@ echo "</body></html>"
 	\item Potwierdza to wykorzystanie komercyjne przez czołowe firmy
 	\item Wykorzystanie sprawdzonych rozwiązań zmniejsza czas rozwoju aplikacji
 	\item Pozwala na użycie w rozwiązaniach wbudowanych technik i narzędzi znanych z systemów serwerowych
-	\item Wciąż mała, lecz rosnąca popularność wśród hobbystów
+	\item W zastosowaniach wbudowanych wciąż mała, lecz rosnąca popularność wśród hobbystów
 	\end{itemize}
 \end{frame}
 
@@ -649,6 +777,7 @@ echo "</body></html>"
 	\item \href{http://www.netbsd.org/docs/guide/en/}{The NetBSD Guide}
 	\item \href{http://www.embeddedarm.com/software/arm-netbsd-toaster.php}{NetBSD based toaster}
 	\item \href{http://misc.allbsd.de/Vortrag/EuroBSDCon_2007/Stephen_Borrill/eurobsdcon.pdf}{Building products with NetBSD - thin clients}
+	\item \href{http://cloud.github.com/downloads/rkujawa/busspace-tutorial/bus_space_tutorial.pdf}{Writing NetBSD drivers with the bus\_space(4) framework}
 	\item Kontakt do mnie
 	\begin{itemize}
 		\item rkujawa@NetBSD.org
