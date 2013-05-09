@@ -530,7 +530,7 @@ wd0: 750 MB, 1524 cyl, 16 head, 63 sec, 512 bytes/sect x 1536192 sectors\end{ver
 \begin{frame}[fragile]
 \frametitle{Sterownik układów MCP980x}
 \begin{itemize}
-	\item Sterownik \href{http://netbsd.gw.com/cgi-bin/man-cgi?mcp980x+4+NetBSD-current}{mcp980x(4)}
+	\item Sterownik {\tt\href{http://netbsd.gw.com/cgi-bin/man-cgi?mcp980x+4+NetBSD-current}{mcp980x(4)}}
 	%\href{http://netbsd.gw.com/cgi-bin/man-cgi?mcp980x+4+NetBSD-current}{mcp980x(4)}
 	\item Źródła
 	\begin{itemize}
@@ -538,11 +538,11 @@ wd0: 750 MB, 1524 cyl, 16 head, 63 sec, 512 bytes/sect x 1536192 sectors\end{ver
 		\item \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/mcp980xreg.h}{src/sys/dev/i2c/mcp980xreg.h}
 		\item Zarejestrowany w \href{http://nxr.netbsd.org/xref/src/sys/dev/i2c/files.i2c}{files.i2c}
 	\end{itemize}
-	\item Wykorzystuje niezależny od platformy sterownik szyny I\textsuperscript{2}C - \href{http://netbsd.gw.com/cgi-bin/man-cgi?iic+9+NetBSD-current}{iic(4)}
+	\item Wykorzystuje niezależny od platformy sterownik szyny I\textsuperscript{2}C - {\tt\href{http://netbsd.gw.com/cgi-bin/man-cgi?iic+9+NetBSD-current}{iic(4)}}
 	\item Konfiguracja jądra
 	\begin{itemize}
 		\item \href{http://nxr.netbsd.org/xref/src/sys/arch/evbarm/conf/BEAGLEBONE}{src/sys/arch/evbarm/conf/BEAGLEBONE}
-		\item mcp980x* at iic1 addr 0x48
+		\item {\tt mcp980x* at iic1 addr 0x48}
 	\end{itemize}
 	\item Komunikaty w buforze jądra podczas startu
 \end{itemize}
@@ -557,11 +557,11 @@ mcp980x0 at iic1 addr 0x48: Microchip MCP980x Temperature Sensor
 \begin{frame}[fragile]
 \frametitle{Komunikacja z przestrzenią użytkownika}
 \begin{itemize}
-	\item Sterownik wykorzystuje interfejs \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon_envsys+9+NetBSD-current}{sysmon\_envsys(9)} do przekazywania danych do przestrzeni użytkownika
-	\item Plik urządzenia /dev/sysmon (\href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon+4+NetBSD-current}{sysmon(4)}) stanowi styk jądra z przestrzenią użytkownika
+	\item Sterownik wykorzystuje interfejs {\tt \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon_envsys+9+NetBSD-current}{sysmon\_envsys(9)}} do przekazywania danych do przestrzeni użytkownika
+	\item Plik urządzenia /dev/sysmon ({\tt \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon+4+NetBSD-current}{sysmon(4)}}) stanowi styk jądra z przestrzenią użytkownika
 	\item Test z powłoki
 	\begin{itemize}
-		\item Polecenie \href{http://netbsd.gw.com/cgi-bin/man-cgi?envstat+8+NetBSD-current}{envstat(8)}
+		\item Polecenie {\tt \href{http://netbsd.gw.com/cgi-bin/man-cgi?envstat+8+NetBSD-current}{envstat(8)}}
 	\end{itemize}
 \end{itemize}
 \scriptsize
@@ -589,7 +589,7 @@ echo "</body></html>"
 \begin{frame}[fragile]
 \frametitle{Serwer HTTP jako interfejs użytkownika}
 \begin{itemize}
-	\item NetBSD posiada wbudowany daemon \href{http://netbsd.gw.com/cgi-bin/man-cgi?httpd++NetBSD-current}{httpd(8)}
+	\item NetBSD posiada wbudowany daemon {\tt\href{http://netbsd.gw.com/cgi-bin/man-cgi?httpd++NetBSD-current}{httpd(8)}}
 	\item Obsługa CGI (oraz języków skryptowych jak PHP, Python)	
 	\item Najprostsze rozwiązanie dla aplikacji wbudowanej:
 	\begin{itemize}
@@ -618,8 +618,8 @@ echo "</body></html>"
 	\item Serwer HTTP wykonuje skrypt CGI, który uruchamia polecenie \href{http://netbsd.gw.com/cgi-bin/man-cgi?envstat++NetBSD-current}{envstat(8)}
 	\item Polecenie to komunikuje się z interfejsem \href{http://netbsd.gw.com/cgi-bin/man-cgi?sysmon++NetBSD-current}{sysmon(4)} poprzez plik urządzenia /dev/sysmon
 	\item Podsystem ten odpytuje sterownik \href{http://netbsd.gw.com/cgi-bin/man-cgi?mcp980x++NetBSD-current}{mcp980x(4)} o temperaturę
-	\item Sterownik komunikuje się z modułem KAmodTEM używając warstwy iic(4) (a pod spodem sterownika  I\textsuperscript{2}C właściwego dla danego kontrolera)
-	\item Skrypt z wyniku envstat wybiera bierzącą temperaturę, opakowuje ją w HTML
+	\item Sterownik komunikuje się z modułem KAmodTEM używając warstwy {\tt \href{http://netbsd.gw.com/cgi-bin/man-cgi?iic++NetBSD-current}{iic(4)}} (a pod spodem sterownika szyny I\textsuperscript{2}C właściwego dla danego kontrolera)
+	\item Skrypt z wyniku {\tt envstat} wybiera bierzącą temperaturę, opakowuje ją w HTML
 \end{itemize}
 \end{frame}
 
@@ -627,7 +627,7 @@ echo "</body></html>"
 \frametitle{Jak zaimplementować historię?}
 \begin{itemize}
 	\item Format RRD -- Round Robin Database
-	\item Narzędzie rrdtool
+	\item Narzędzie {\tt rrdtool}
 	\item Skrypt uruchamiany za pomocą cron'a próbkuje temperaturę
 	\item Próbka zapisywana jest do bazy RRD
 	\item Zestaw skryptów uruchamianych z cron'a generuje wykresy na podstawie danych w bazie (ostatnia godzina, dzień, tydzień)
@@ -667,11 +667,11 @@ LINE1:temp#0000FF:"MCP9801 ambient temperature\l"
 \end{verbatim}
 \normalsize
 \begin{itemize}
-	\item Zapis próbek do bazy -- temp-update.sh
+	\item Zapis próbek do bazy -- {\tt temp-update.sh}
 \end{itemize}
 \lstrrdupdate
 \begin{itemize}
-	\item Skrypt generujący wykresy -- temp-graph.sh
+	\item Skrypt generujący wykresy -- {\tt temp-graph.sh}
 \end{itemize}
 \lstrrdgraph
 \begin{verbatim}
@@ -681,11 +681,11 @@ LINE1:temp#0000FF:"MCP9801 ambient temperature\l"
 \begin{frame}[fragile]
 \frametitle{Przeglądanie historii}
 \begin{itemize}
-	\item W wyniku działania skryptów w /var/www/rrd/ odkładane są gotowe wykresy
-	\item Wyświetlanie wszystkich wykresów możliwe jest z jednego pliku HTML -- /var/www/history.html
+	\item W wyniku działania skryptów w {\tt /var/www/rrd/} odkładane są gotowe wykresy
+	\item Wyświetlanie wszystkich wykresów możliwe jest z jednego pliku HTML -- {\tt /var/www/history.html}
 	\item Test:
 	\begin{itemize}
-		\item http://adres\_beaglebone/history.html
+		\item {\tt http://adres\_beaglebone/history.html}
 	\end{itemize}
 \end{itemize}
 \scriptsize
@@ -748,6 +748,7 @@ History: last week<br/>
 			\item przyciski
 		\end{itemize}
 		\item ...
+		% zdalne sterowanie samochodem RC
 	\end{itemize}
 \end{itemize}
 \end{frame}
